@@ -1,6 +1,9 @@
 name: 'Serverless Action'
 description: Github action for serverless framework
 inputs:
+  stage:
+    description: severless app stage
+    default: dev
   args:
     description: arguments for sls command
     required: true
@@ -9,6 +12,7 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.args }}
+    - ${{ inputs.stage}}
 branding:
   icon: 'zap' 
   color: black
