@@ -11,8 +11,8 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.args }}
     - ${{ inputs.stage}}
+    - ${{ inputs.args }} 
 branding:
   icon: 'zap' 
   color: black
