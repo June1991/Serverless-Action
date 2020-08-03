@@ -6,34 +6,43 @@ Github action for serverless framework
 
 | Input |                         Description |              Example | Required |
 | :---- | ----------------------------------: | -------------------: | -------: |
-| args  | arguments/options for `sls` command | `--stage dev deploy` |      yes |
+| args  | arguments/options for `sls` command | `--inputs.stage=prod` |      yes |
 
 ## Usage
 
 ```yaml
-name: deploy lambda functions
+
+name: deploy serverless
+
 
 on:
   push:
     branches:
       - master
-
-env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_DEFAULT_REGION: us-east-1
-
+  
 jobs:
-  deploy_serverless:
-    name: deploy
+  test:
+    name: test
     runs-on: ubuntu-latest
+    steps:
+      - name: unit test
+        run: '' 
+  deploy:
+    name: deploy serverless
+    runs-on: ubuntu-latest
+    needs: [test]
     steps:
       - name: clone local repository
         uses: actions/checkout@v2
-      - name: npm install
+      - name: install dependency
         run: npm install
-      - name: deploy
-        uses: Teakowa/serverless-action@master
-        with:
-          args: --stage prod deploy
+      - name: build
+        run: npm build
+      - name: deploy serverless
+        uses: June1991/serverless-action@master
+        env:
+          SERVERLESS_PLATFORM_VENDOR: tencent
+          TENCENT_SECRET_ID: ${{ secrets.TENCENT_SECRET_ID }}
+          TENCENT_SECRET_KEY: ${{ secrets.TENCENT_SECRET_KEY }}
+      
 ```
